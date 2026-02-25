@@ -28,17 +28,28 @@ This produces a more neutral and engineering-relevant reference point for:
 ## 🎯 Core Capabilities
 
 - Least-Squares Equidistant Center Calculation
-- Automatic CRS Handling (Global UTM-safe)
+- Automatic projected CRS handling with UTM detection
 - Radial Distance Mapping
 - Real-time Visual Customization
 - Interactive Center Adjustment Tool
 - Multi-Result Session Management
 - Export to Excel (XLSX)
 - Export to GeoPackage (GPKG)
-- License-protected deployment
+- Optional license-based deployment support
 
 ---
+## 📸 Screenshots
 
+### Equidistant Center Result
+![center](docs/screenshots/center.png)
+
+### Radial Distance Mapping
+![radial](docs/screenshots/radial.png)
+
+### Session Export Table
+![export](docs/screenshots/export.png)
+
+---
 ## 🧠 How It Works
 
 1. Select 2 or more point features in QGIS.
@@ -54,12 +65,12 @@ The system is fully CRS-aware and handles global datasets reliably.
 
 ## 🛠 Technical Architecture
 
-- Built for QGIS 3.40 LTR+
+- Tested on QGIS 3.40 LTR
 - CRS-safe transformation pipeline
 - Automatic UTM zone detection
 - Memory-layer lifecycle control
-- Reload-safe toolbar management
-- Export modules hardened for production
+- Stable toolbar lifecycle handling
+- Structured export modules (XLSX & GPKG)
 - Visual settings applied without recalculation
 
 This plugin is designed to behave as a stable engineering tool — not a prototype script.
