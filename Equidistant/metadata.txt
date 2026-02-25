@@ -1,0 +1,22 @@
+[general]
+name=Equidistant Site Center
+description=Compute a spatially balanced center point from selected sites using least-squares distance optimization.
+version=1.0.0
+qgisMinimumVersion=3.40
+author=Achmad Amrulloh
+email=achmad.amrulloh@gmail.com
+license=MIT
+
+about=Equidistant Site Center is a QGIS plugin designed for RF engineers, telecom planners, and GIS analysts. It computes an optimized spatial center point from multiple selected site locations using equal-distance optimization. The result includes center visualization and distance lines for spatial analysis.
+
+category=Analysis
+tags=RF planning, telecom, site planning, optimization, geometry, spatial analysis
+
+homepage=https://github.com/erlrich/equidistant-site-center-qgis
+repository=https://github.com/erlrich/equidistant-site-center-qgis
+tracker=https://github.com/erlrich/equidistant-site-center-qgis/issues
+
+icon=new_site.png
+
+experimental=False
+deprecated=False
