@@ -38,14 +38,36 @@ This produces a more neutral and engineering-relevant reference point for:
 
 ## 📸 Screenshots
 
-### Calculation Dialog
-![radial](docs/screenshots/equidistant_calculate.png)
+---
 
-### Equidistant Center Result
-![center](docs/screenshots/equidistant_result.png)
+## 📸 Workflow Overview
 
-### Adjust Center Mode
-![adjust](docs/screenshots/equidistant_adjust_center.png)
+The plugin operates in a structured three-step workflow:
+
+### 1️⃣ Calculation Setup
+
+Input tolerance and initiate the least-squares optimization process.
+
+![Calculation Dialog](docs/screenshots/equidistant_calculate.png)
+
+---
+
+### 2️⃣ Equidistant Center Result
+
+Balanced center point computed using distance variance minimization.  
+Radial deviation lines are generated for spatial analysis.
+
+![Equidistant Center Result](docs/screenshots/equidistant_result.png)
+
+---
+
+### 3️⃣ Interactive Center Adjustment
+
+Manually refine the center position while maintaining real-time visual feedback.
+
+![Adjust Center Mode](docs/screenshots/equidistant_adjust_center.png)
+
+---
 
 ---
 
