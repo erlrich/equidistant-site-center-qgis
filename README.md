@@ -39,10 +39,13 @@ This produces a more neutral and engineering-relevant reference point for:
 ## 📸 Screenshots
 
 ### Equidistant Center Result
-![center](docs/screenshots/center.png)
+![center](docs/screenshots/equidistant_result.png)
 
 ### Radial Distance Mapping
-![radial](docs/screenshots/radial.png)
+![radial](docs/screenshots/equidistant_calculate.png)
+
+### Adjust Center Mode
+![adjust](docs/screenshots/equidistant_adjust_center.png)
 
 ---
 
