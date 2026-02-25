@@ -1,11 +1,11 @@
-# equidistant-site-center-qgis
-Advanced QGIS plugin for equidistant site center calculation
 # Equidistant Site Center  
 ### Engineering-Grade Spatial Optimization for QGIS
 
-Equidistant Site Center is a professional QGIS plugin designed for RF engineers, telecom planners, and GIS analysts who require a spatially balanced center point derived from multiple site locations.
+Equidistant Site Center is an open-source QGIS plugin designed for RF engineers, telecom planners, and GIS analysts who require a spatially balanced center point derived from multiple site locations.
 
 Unlike simple centroid calculations, this plugin applies a least-squares distance optimization approach to minimize distance variance across all selected sites.
+
+Released under the MIT License.
 
 ---
 
@@ -30,14 +30,12 @@ This produces a more neutral and engineering-relevant reference point for:
 - Least-Squares Equidistant Center Calculation
 - Automatic projected CRS handling with UTM detection
 - Radial Distance Mapping
-- Real-time Visual Customization
 - Interactive Center Adjustment Tool
-- Multi-Result Session Management
-- Export to Excel (XLSX)
-- Export to GeoPackage (GPKG)
-- Optional license-based deployment support
+- Real-time Visual Customization
+- CRS-safe transformation pipeline
 
 ---
+
 ## 📸 Screenshots
 
 ### Equidistant Center Result
@@ -46,10 +44,8 @@ This produces a more neutral and engineering-relevant reference point for:
 ### Radial Distance Mapping
 ![radial](docs/screenshots/radial.png)
 
-### Session Export Table
-![export](docs/screenshots/export.png)
-
 ---
+
 ## 🧠 How It Works
 
 1. Select 2 or more point features in QGIS.
@@ -57,7 +53,7 @@ This produces a more neutral and engineering-relevant reference point for:
 3. Coordinates are transformed safely.
 4. A least-squares optimization engine computes the balanced center.
 5. Radial deviation lines are generated.
-6. Results can be stored in session and exported.
+6. Results are displayed as memory layers inside the project.
 
 The system is fully CRS-aware and handles global datasets reliably.
 
@@ -66,27 +62,12 @@ The system is fully CRS-aware and handles global datasets reliably.
 ## 🛠 Technical Architecture
 
 - Tested on QGIS 3.40 LTR
-- CRS-safe transformation pipeline
 - Automatic UTM zone detection
 - Memory-layer lifecycle control
 - Stable toolbar lifecycle handling
-- Structured export modules (XLSX & GPKG)
 - Visual settings applied without recalculation
 
 This plugin is designed to behave as a stable engineering tool — not a prototype script.
-
----
-
-## 📦 Session Management
-
-Multiple optimization results can be stored within a session.
-
-Session outputs can be exported to:
-
-- XLSX (structured report format)
-- GeoPackage (CRS-safe vector layers)
-
-All exported geometries preserve spatial integrity.
 
 ---
 
@@ -100,12 +81,15 @@ All exported geometries preserve spatial integrity.
 
 ---
 
-## 🔐 Licensing
+## 💼 Professional Edition
 
-This plugin uses device-based license activation.
+A Professional Edition is available separately, providing:
 
-For activation inquiries:
-Please contact the author.
+- Advanced workflow automation
+- Multi-session management
+- Structured reporting tools
+
+For more information, please contact the author.
 
 ---
 
@@ -114,33 +98,7 @@ Please contact the author.
 Achmad Amrulloh  
 Telecom Engineer → Spatial Software Developer  
 
-© 2026 Dinzo. All rights reserved.
-
----
-
-## 📌 Roadmap
-
-Future development may include:
-
-- Weighted site optimization
-- Batch scenario processing
-- Sector-based balancing
-- Automated PDF reporting
-- Enterprise multi-user licensing
-- Integration with RF KPI datasets
-
----
-
-## 🤝 Collaboration
-
-If you work in:
-
-- RF Planning
-- Network Optimization
-- Telecom Infrastructure Strategy
-- GIS-based Spatial Analysis
-
-Feel free to connect and exchange ideas.
+Released under the MIT License.
 
 ---
 
