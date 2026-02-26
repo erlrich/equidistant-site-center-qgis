@@ -106,18 +106,6 @@ This plugin is designed to behave as a stable engineering tool — not a prototy
 
 ---
 
-## 💼 Professional Edition
-
-A separate Professional Edition is available for extended workflow capabilities, including:
-
-- Advanced workflow automation
-- Multi-session management
-- Structured reporting tools
-
-The open-source version published here remains fully functional for core spatial optimization tasks.
-
----
-
 ## 👨‍💻 Author
 
 Achmad Amrulloh  
