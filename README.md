@@ -1,5 +1,7 @@
 # Equidistant Site Center  
 ### Engineering-Grade Spatial Optimization for QGIS
+![Release](https://img.shields.io/github/v/release/erlrich/equidistant-site-center-qgis)
+![License](https://img.shields.io/github/license/erlrich/equidistant-site-center-qgis)
 
 Equidistant Site Center is an open-source QGIS plugin designed for RF engineers, telecom planners, and GIS analysts who require a spatially balanced center point derived from multiple site locations.
 
