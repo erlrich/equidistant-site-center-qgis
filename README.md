@@ -35,7 +35,7 @@ This produces a more neutral and engineering-relevant reference point for:
 - Interactive Center Adjustment Tool
 - Real-time Visual Customization
 - CRS-safe transformation pipeline
-- Optional notification panel for updates
+- Optional notification panel for plugin updates
 
 ---
 
@@ -84,6 +84,7 @@ The system is fully CRS-aware and handles global datasets reliably.
 ## 🛠 Technical Architecture
 
 - Tested on QGIS 3.40 LTR and QGIS 4.0
+- Qt6-compatible (single codebase for QGIS 3 & QGIS 4)
 - Automatic UTM zone detection
 - Memory-layer lifecycle control
 - Stable toolbar lifecycle handling
@@ -105,7 +106,25 @@ This plugin is designed to behave as a stable engineering tool — not a prototy
 
 ## 📋 Changelog
 
-See [metadata.txt](Equidistant/metadata.txt) for full changelog.
+For full changelog, see [Equidistant/metadata.txt](Equidistant/metadata.txt).
+
+**Latest**: v1.1.4 — Qt6/QGIS4 compatibility, bug fixes, unit enhancement, and notification panel.
+
+---
+
+## 📦 Installation
+
+### From QGIS Plugin Repository
+1. Open QGIS
+2. Plugins → Manage and Install Plugins
+3. Search "Equidistant Site Center"
+4. Click Install
+
+### From ZIP (Manual)
+1. Download the latest release ZIP from [Releases](https://github.com/erlrich/equidistant-site-center-qgis/releases)
+2. In QGIS: Plugins → Manage and Install Plugins → Install from ZIP
+3. Select the downloaded ZIP file
+4. Enable the plugin
 
 ---
 
