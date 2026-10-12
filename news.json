@@ -4,7 +4,7 @@
   "news": [
     {
       "id": "2026-10-12-001",
-      "title": "Equidistant Site Center v1.1.4 Released",
+      "title": "Equidistant Site Center v1.1.5 Released",
       "date": "2026-10-12",
       "content": "Maintenance update with improvements to notification system and settings persistence.",
       "link": "https://github.com/erlrich/equidistant-site-center-qgis/releases/tag/v1.1.4",
