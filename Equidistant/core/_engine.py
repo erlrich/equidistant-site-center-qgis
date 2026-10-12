@@ -14,9 +14,11 @@ from qgis.core import (
     QgsVectorLayer,
     QgsField,
     QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem
+    QgsCoordinateReferenceSystem,
+    QgsMessageLog,
+    Qgis
 )
-from PyQt5.QtCore import QVariant
+from qgis.PyQt.QtCore import QMetaType
 
 from ._e1 import _k
 
@@ -68,9 +70,15 @@ def _r2(crs):
         "Equidistant_Center_Distance",
         "memory"
     )
-    l1.dataProvider().addAttributes([
-        QgsField("distance_m", QVariant.Double)
+    success = l1.dataProvider().addAttributes([
+        QgsField("distance_m", QMetaType.Type.Double)
     ])
+    if not success:
+        QgsMessageLog.logMessage(
+            "Failed to add attributes to Equidistant_Center_Distance layer",
+            "Equidistant Site Center",
+            Qgis.Critical
+        )
     l1.updateFields()
 
     l2 = QgsVectorLayer(
@@ -78,15 +86,21 @@ def _r2(crs):
         "Equidistant_Center_Result",
         "memory"
     )
-    l2.dataProvider().addAttributes([
-        QgsField("method", QVariant.String),
-        QgsField("delta_m", QVariant.Double),
-        QgsField("valid", QVariant.Bool),
-        QgsField("longitude", QVariant.Double),
-        QgsField("latitude", QVariant.Double),
-        QgsField("location", QVariant.String),
-        QgsField("status", QVariant.String),
+    success = l2.dataProvider().addAttributes([
+        QgsField("method", QMetaType.Type.QString),
+        QgsField("delta_m", QMetaType.Type.Double),
+        QgsField("valid", QMetaType.Type.Bool),
+        QgsField("longitude", QMetaType.Type.Double),
+        QgsField("latitude", QMetaType.Type.Double),
+        QgsField("location", QMetaType.Type.QString),
+        QgsField("status", QMetaType.Type.QString),
     ])
+    if not success:
+        QgsMessageLog.logMessage(
+            "Failed to add attributes to Equidistant_Center_Result layer",
+            "Equidistant Site Center",
+            Qgis.Critical
+        )
     l2.updateFields()
 
     return l1, l2

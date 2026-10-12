@@ -15,10 +15,10 @@ from qgis.core import (
     QgsCoordinateTransform, QgsCoordinateReferenceSystem,
     QgsPalLayerSettings, QgsTextFormat, QgsTextBufferSettings,
     QgsVectorLayerSimpleLabeling, QgsSymbol, QgsSingleSymbolRenderer,
-    QgsField
+    QgsField, QgsMessageLog, Qgis
 )
 from qgis.PyQt.QtCore import Qt
-from PyQt5.QtCore import QVariant
+from qgis.PyQt.QtCore import QMetaType
 
 
 class AdjustCenterTool(QgsMapTool):
@@ -38,7 +38,7 @@ class AdjustCenterTool(QgsMapTool):
         self._v = source_points
         self._c = crs_authid
 
-        self.setCursor(Qt.CrossCursor)
+        self.setCursor(Qt.CursorShape.CrossCursor)
 
         prj = QgsProject.instance()
         self._x = prj.transformContext()
@@ -48,17 +48,18 @@ class AdjustCenterTool(QgsMapTool):
         self._t = QgsCoordinateTransform(self._l, self._m, self._x)
 
         self._rb0 = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
-        self._rb0.setColor(Qt.red)
+        self._rb0.setColor(Qt.GlobalColor.red)
         self._rb0.setWidth(8)
 
         self._rb1 = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
-        self._rb1.setColor(Qt.yellow)
+        self._rb1.setColor(Qt.GlobalColor.yellow)
         self._rb1.setWidth(1)
 
         self._a = True
 
         self.iface.mainWindow().statusBar().showMessage(
-            "Adjust Center: move mouse to preview, click to set, ESC to finish"
+            "Adjust Center: move mouse to preview, click to set, ESC to finish",
+            5000
         )
 
     # -------------------------------------------------
@@ -86,7 +87,7 @@ class AdjustCenterTool(QgsMapTool):
     # Left click → finalize
     # -------------------------------------------------
     def canvasPressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             c0 = self.toMapCoordinates(event.pos())
             self._z()
             self._x1(c0)
@@ -95,10 +96,10 @@ class AdjustCenterTool(QgsMapTool):
     # ESC → cancel
     # -------------------------------------------------
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Qt.Key.Key_Escape:
             self._z()
             self._a = False
-            self.setCursor(Qt.ArrowCursor)
+            self.setCursor(Qt.CursorShape.ArrowCursor)
             self.iface.mainWindow().statusBar().clearMessage()
 
             try:
@@ -160,7 +161,14 @@ class AdjustCenterTool(QgsMapTool):
             "memory"
         )
         dp = ln.dataProvider()
-        dp.addAttributes([QgsField("distance_m", QVariant.Double)])
+        success = dp.addAttributes([QgsField("distance_m", QMetaType.Type.Double)])
+        if not success:
+            QgsMessageLog.logMessage(
+                "Adjust Center: addAttributes failed for "
+                "'Equidistant_Center_Distance' (line layer).",
+                "Equidistant Site Center",
+                Qgis.Warning
+            )
         ln.updateFields()
 
         d = []
@@ -177,7 +185,14 @@ class AdjustCenterTool(QgsMapTool):
             f = QgsFeature()
             f.setGeometry(g)
             f.setAttributes([round(dist, 2)])
-            dp.addFeature(f)
+            success = dp.addFeature(f)
+            if not success:
+                QgsMessageLog.logMessage(
+                    "Adjust Center: addFeature failed for "
+                    "distance feature.",
+                    "Equidistant Site Center",
+                    Qgis.Warning
+                )
 
             d.append(dist)
 
@@ -198,15 +213,22 @@ class AdjustCenterTool(QgsMapTool):
             "memory"
         )
         dp = pt.dataProvider()
-        dp.addAttributes([
-            QgsField("method", QVariant.String),
-            QgsField("delta_m", QVariant.Double),
-            QgsField("valid", QVariant.Bool),
-            QgsField("longitude", QVariant.Double),
-            QgsField("latitude", QVariant.Double),
-            QgsField("location", QVariant.String),
-            QgsField("status", QVariant.String)
+        success = dp.addAttributes([
+            QgsField("method", QMetaType.Type.QString),
+            QgsField("delta_m", QMetaType.Type.Double),
+            QgsField("valid", QMetaType.Type.Bool),
+            QgsField("longitude", QMetaType.Type.Double),
+            QgsField("latitude", QMetaType.Type.Double),
+            QgsField("location", QMetaType.Type.QString),
+            QgsField("status", QMetaType.Type.QString)
         ])
+        if not success:
+            QgsMessageLog.logMessage(
+                "Adjust Center: addAttributes failed for "
+                "'Equidistant_Center_Result' (point layer).",
+                "Equidistant Site Center",
+                Qgis.Warning
+            )
         pt.updateFields()
 
         dl = max(d) - min(d) if d else 0.0
@@ -228,17 +250,24 @@ class AdjustCenterTool(QgsMapTool):
             f"{lon}, {lat}",
             "ADJUSTED"
         ])
-        dp.addFeature(f)
+        success = dp.addFeature(f)
+        if not success:
+            QgsMessageLog.logMessage(
+                "Adjust Center: addFeature failed for "
+                "center feature.",
+                "Equidistant Site Center",
+                Qgis.Warning
+            )
 
         pt.updateExtents()
         prj.addMapLayer(pt)
 
         sm = QgsSymbol.defaultSymbol(pt.geometryType())
         sm.setSize(6)
-        sm.setColor(Qt.red)
+        sm.setColor(Qt.GlobalColor.red)
         pt.setRenderer(QgsSingleSymbolRenderer(sm))
         pt.triggerRepaint()
-        
+
         # Apply visual settings from plugin (ensure labeling active)
         try:
             self.iface.plugin().apply_visual_settings_realtime()

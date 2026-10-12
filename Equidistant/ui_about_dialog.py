@@ -22,11 +22,11 @@ class EquidistantCenterAboutDialog(QDialog):
         layout = QVBoxLayout(self)
 
         title = QLabel("Equidistant Site Center")
-        title.setFont(QFont("Arial", 16, QFont.Bold))
-        title.setAlignment(Qt.AlignCenter)
+        title.setFont(QFont("Arial", 16, QFont.Weight.Bold))
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         subtitle = QLabel("Spatial Balancing Tool for QGIS")
-        subtitle.setAlignment(Qt.AlignCenter)
+        subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle.setStyleSheet("color: gray; margin-bottom: 8px;")
 
         info = QLabel(
@@ -48,7 +48,7 @@ class EquidistantCenterAboutDialog(QDialog):
             "© 2026 Achmad Amrulloh. Released under the MIT License."
         )
 
-        info.setAlignment(Qt.AlignCenter)
+        info.setAlignment(Qt.AlignmentFlag.AlignCenter)
         info.setWordWrap(True)
         info.setStyleSheet("margin-top: 10px; margin-bottom: 10px;")
 
@@ -60,5 +60,5 @@ class EquidistantCenterAboutDialog(QDialog):
         layout.addWidget(subtitle)
         layout.addWidget(info)
         layout.addStretch()
-        layout.addWidget(btn, 0, Qt.AlignCenter)
+        layout.addWidget(btn, 0, Qt.AlignmentFlag.AlignCenter)
 

@@ -35,10 +35,7 @@ This produces a more neutral and engineering-relevant reference point for:
 - Interactive Center Adjustment Tool
 - Real-time Visual Customization
 - CRS-safe transformation pipeline
-
----
-
-## 📸 Screenshots
+- Optional notification panel for updates
 
 ---
 
@@ -71,8 +68,6 @@ Manually refine the center position while maintaining real-time visual feedback.
 
 ---
 
----
-
 ## 🧠 How It Works
 
 1. Select 2 or more point features in QGIS.
@@ -88,7 +83,7 @@ The system is fully CRS-aware and handles global datasets reliably.
 
 ## 🛠 Technical Architecture
 
-- Tested on QGIS 3.40 LTR
+- Tested on QGIS 3.40 LTR and QGIS 4.0
 - Automatic UTM zone detection
 - Memory-layer lifecycle control
 - Stable toolbar lifecycle handling
@@ -105,6 +100,12 @@ This plugin is designed to behave as a stable engineering tool — not a prototy
 - Site distribution evaluation
 - Distance neutrality analysis
 - Multi-site infrastructure planning
+
+---
+
+## 📋 Changelog
+
+See [metadata.txt](Equidistant/metadata.txt) for full changelog.
 
 ---
 

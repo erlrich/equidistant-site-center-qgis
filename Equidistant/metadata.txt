@@ -1,8 +1,9 @@
 [general]
 name=Equidistant Site Center
 description=Compute a spatially balanced center point from selected sites using least-squares distance optimization.
-version=1.0.0
+version=1.1.4
 qgisMinimumVersion=3.40
+qgisMaximumVersion=4.99
 author=Achmad Amrulloh
 email=achmad.amrulloh@gmail.com
 license=MIT
@@ -20,3 +21,22 @@ icon=new_site.png
 
 experimental=False
 deprecated=False
+
+changelog=
+    1.1.4 - Maintenance update.
+            - Added: Informational notification panel
+            - Improved: Settings persistence for label options
+    1.1.3 - Bug fix + unit enhancement.
+            - Fixed: Precision & unit suffix not saved in settings
+            - Added: Unit dropdown (m / km) with km auto-conversion
+    1.1.2 - Bug fix.
+            - Fixed: Label precision & unit suffix now applied
+            - Fixed: Adjust Center status bar timeout
+    1.1.1 - QGIS 4 (Qt6) compatibility update.
+            - Migrated to qgis.PyQt imports
+            - Migrated Qt5 enums to Qt6 long-form
+            - Replaced QVariant with QMetaType.Type.*
+            - Migrated QGIS enums to Qgis.* namespace
+            - Added provider validation (addAttributes/addFeatures)
+            - Added qgisMaximumVersion=4.99
+    1.0.0 - Initial release.

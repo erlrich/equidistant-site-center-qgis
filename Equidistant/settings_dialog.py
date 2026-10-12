@@ -11,7 +11,7 @@
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QGroupBox,
     QLabel, QPushButton, QColorDialog, QSpinBox,
-    QDoubleSpinBox, QComboBox, QLineEdit, QCheckBox
+    QDoubleSpinBox, QComboBox, QCheckBox
 )
 
 from qgis.PyQt.QtGui import QColor
@@ -171,8 +171,12 @@ class EquidistantCenterSettingsDialog(QDialog):
         )
         v.addLayout(self._row("Precision", self.label_precision))
 
-        self.label_unit = QLineEdit(self.settings.label_unit_suffix())
-        v.addLayout(self._row("Unit suffix", self.label_unit))
+        self.label_unit = QComboBox()
+        self.label_unit.addItems(["m", "km"])
+        # Strip whitespace untuk matching (settings simpan dengan spasi)
+        current = self.settings.label_unit_suffix().strip()
+        self.label_unit.setCurrentText(current if current in ["m", "km"] else "m")
+        v.addLayout(self._row("Unit", self.label_unit))
 
         return box
 
@@ -245,6 +249,8 @@ class EquidistantCenterSettingsDialog(QDialog):
         s.set_value("label/color", self.label_color.color().name())
         s.set_value("label/buffer_size", self.label_buffer_size.value())
         s.set_value("label/buffer_color", self.label_buffer_color.color().name())
+        s.set_value("label/precision", self.label_precision.value())
+        s.set_value("label/unit_suffix", " " + self.label_unit.currentText())
 
         # REALTIME APPLY
         if self.plugin:
@@ -280,6 +286,9 @@ class EquidistantCenterSettingsDialog(QDialog):
         self.label_buffer_size.setValue(self.settings.label_buffer_size())
         self.label_buffer_color._color = self.settings.label_buffer_color()
         self.label_buffer_color._update_style()
+        self.label_precision.setValue(self.settings.label_precision())
+        unit = self.settings.label_unit_suffix().strip()
+        self.label_unit.setCurrentText(unit if unit in ["m", "km"] else "m")
 
         # Apply immediately
         if self.plugin:

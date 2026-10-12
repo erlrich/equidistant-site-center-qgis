@@ -10,16 +10,16 @@
 
 import os
 
-from qgis.PyQt.QtWidgets import QAction, QMessageBox
-from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox
+from qgis.PyQt.QtGui import QAction, QIcon
 from qgis.PyQt.QtCore import Qt, QSettings
 
 from qgis.core import (
     QgsProject, QgsCoordinateTransform, QgsCoordinateReferenceSystem,
-    QgsSimpleMarkerSymbolLayerBase, QgsWkbTypes,
+    QgsWkbTypes,
     QgsFeature, QgsGeometry,
     QgsUnitTypes, QgsSymbol, QgsSingleSymbolRenderer,
-    QgsRuleBasedRenderer, Qgis
+    QgsRuleBasedRenderer, QgsMessageLog, Qgis
 )
 
 from .equidistant_center_dialog import EquidistantCenterDialog
@@ -28,6 +28,8 @@ from .core._engine import _r1, _r2
 from .settings_dialog import EquidistantCenterSettingsDialog
 from .ui_about_dialog import EquidistantCenterAboutDialog
 from .core.adjust_center_tool import AdjustCenterTool
+from .news_manager import NewsManager
+from .news_dialog import NewsDialog
 
 
 class EquidistantCenterPlugin:
@@ -36,7 +38,48 @@ class EquidistantCenterPlugin:
         self.iface = iface
         self.action = None
         self._adjust_center_active = False
+        self._news_manager = NewsManager()
 
+
+    # =========================================================
+    # NEWS CHECKER
+    # =========================================================
+    def _check_news(self):
+        """
+        Check & display news from GitHub JSON.
+
+        Behavior:
+        - Fetch hanya kalau sudah lewat 7 hari (via NewsManager)
+        - Tampilkan dialog kalau ada unread news
+        - Semua error di-handle silent (tidak block plugin load)
+        """
+        try:
+            # Fetch kalau sudah waktunya
+            if self._news_manager.should_fetch():
+                self._news_manager.fetch()
+
+            # Cek unread news
+            unread = self._news_manager.get_unread_news()
+            if not unread:
+                return
+
+            # Tampilkan dialog
+            dlg = NewsDialog(
+                unread,
+                parent=self.iface.mainWindow(),
+                mark_all_callback=self._news_manager.mark_all_as_read
+            )
+            dlg.exec()
+
+        except Exception as e:
+            # Silent fail — jangan block plugin load
+            QgsMessageLog.logMessage(
+                f"News check exception: {e}",
+                "Equidistant Site Center",
+                Qgis.Warning
+            )
+            
+        
     # =========================================================
     # FIRST RUN MESSAGE
     # =========================================================
@@ -112,6 +155,10 @@ class EquidistantCenterPlugin:
         self.about_action.triggered.connect(self.open_about)
         self.iface.addPluginToMenu(main_menu, self.about_action)
 
+        # NEWS CHECK (deferred — biar tidak block plugin load)
+        from qgis.PyQt.QtCore import QTimer
+        QTimer.singleShot(2000, self._check_news)
+
     # =========================================================
     # UNLOAD
     # =========================================================
@@ -166,7 +213,7 @@ class EquidistantCenterPlugin:
             self.iface.mainWindow()
         )
 
-        if dlg.exec_() != dlg.Accepted:
+        if dlg.exec() != QDialog.DialogCode.Accepted:
             return
 
         tolerance = dlg.get_tolerance()
@@ -214,7 +261,13 @@ class EquidistantCenterPlugin:
             f = QgsFeature()
             f.setGeometry(QgsGeometry.fromPolylineXY([center_final, p_geo]))
             f.setAttributes([round(dist, 2)])
-            pr.addFeature(f)
+            success = pr.addFeature(f)
+            if not success:
+                QgsMessageLog.logMessage(
+                    "Plugin: addFeature failed for distance feature.",
+                    "Equidistant Site Center",
+                    Qgis.Warning
+                )
 
         QgsProject.instance().addMapLayer(line_layer)
 
@@ -237,7 +290,13 @@ class EquidistantCenterPlugin:
             f"{lon}, {lat}",
             "AUTO"
         ])
-        pr.addFeature(f)
+        success = pr.addFeature(f)
+        if not success:
+            QgsMessageLog.logMessage(
+                "Plugin: addFeature failed for center feature.",
+                "Equidistant Site Center",
+                Qgis.Warning
+            )
 
         QgsProject.instance().addMapLayer(center_layer)
 
@@ -332,7 +391,7 @@ class EquidistantCenterPlugin:
             sl.setWidth(settings.line_width())
             sl.setColor(settings.line_color())
             sl.setPenStyle(
-                Qt.DashLine if settings.line_style() == "dash" else Qt.SolidLine
+                Qt.PenStyle.DashLine if settings.line_style() == "dash" else Qt.PenStyle.SolidLine
             )
 
             line_layer.setRenderer(QgsSingleSymbolRenderer(symbol))
@@ -348,9 +407,19 @@ class EquidistantCenterPlugin:
             )
 
             pal = QgsPalLayerSettings()
-            pal.fieldName = 'round("distance_m") || \' m\''
+            precision = settings.label_precision()
+            unit = settings.label_unit_suffix().strip()  # "m" or "km"
+
+            if unit == "km":
+                # Convert: distance_m / 1000, then round
+                expr = f'round("distance_m" / 1000.0, {precision}) || \' km\''
+            else:
+                # Default: meter
+                expr = f'round("distance_m", {precision}) || \' m\''
+
+            pal.fieldName = expr
             pal.isExpression = True
-            pal.placement = QgsPalLayerSettings.Curved
+            pal.placement = Qgis.LabelPlacement.Curved
             pal.enabled = True
 
             tf = QgsTextFormat()
@@ -371,17 +440,18 @@ class EquidistantCenterPlugin:
             line_layer.triggerRepaint()
 
         self.iface.mapCanvas().refresh()
-
+        
+        
     # =========================================================
     # SETTINGS / ABOUT
     # =========================================================
     def open_settings(self):
         dlg = EquidistantCenterSettingsDialog(self.iface.mainWindow(), plugin=self)
-        dlg.exec_()
+        dlg.exec()
 
     def open_about(self):
         dlg = EquidistantCenterAboutDialog(self.iface.mainWindow())
-        dlg.exec_()
+        dlg.exec()
 
     # =========================================================
     # HELPERS
@@ -398,25 +468,25 @@ class EquidistantCenterPlugin:
     def _apply_marker_shape(self, symbol, shape_name):
 
         sl = symbol.symbolLayer(0)
-        if not isinstance(sl, QgsSimpleMarkerSymbolLayerBase):
+        if sl is None:
             return
 
         mapping = {
-            "circle": QgsSimpleMarkerSymbolLayerBase.Circle,
-            "square": QgsSimpleMarkerSymbolLayerBase.Square,
-            "diamond": QgsSimpleMarkerSymbolLayerBase.Diamond,
-            "pentagon": QgsSimpleMarkerSymbolLayerBase.Pentagon,
-            "hexagon": QgsSimpleMarkerSymbolLayerBase.Hexagon,
-            "triangle": QgsSimpleMarkerSymbolLayerBase.Triangle,
-            "equilateral_triangle": QgsSimpleMarkerSymbolLayerBase.EquilateralTriangle,
-            "star": QgsSimpleMarkerSymbolLayerBase.Star,
-            "arrow": QgsSimpleMarkerSymbolLayerBase.Arrow,
-            "cross": QgsSimpleMarkerSymbolLayerBase.Cross,
-            "cross_fill": QgsSimpleMarkerSymbolLayerBase.CrossFill,
-            "cross2": QgsSimpleMarkerSymbolLayerBase.Cross2,
+            "circle": Qgis.MarkerShape.Circle,
+            "square": Qgis.MarkerShape.Square,
+            "diamond": Qgis.MarkerShape.Diamond,
+            "pentagon": Qgis.MarkerShape.Pentagon,
+            "hexagon": Qgis.MarkerShape.Hexagon,
+            "triangle": Qgis.MarkerShape.Triangle,
+            "equilateral_triangle": Qgis.MarkerShape.EquilateralTriangle,
+            "star": Qgis.MarkerShape.Star,
+            "arrow": Qgis.MarkerShape.Arrow,
+            "cross": Qgis.MarkerShape.Cross,
+            "cross_fill": Qgis.MarkerShape.CrossFill,
+            "cross2": Qgis.MarkerShape.Cross2,
         }
 
-        sl.setShape(mapping.get(shape_name.lower(), QgsSimpleMarkerSymbolLayerBase.Circle))
+        sl.setShape(mapping.get(shape_name.lower(), Qgis.MarkerShape.Circle))
 
     def _get_projected_crs(self, layer, selected_features):
 
