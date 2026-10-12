@@ -4,19 +4,19 @@
   "news": [
     {
       "id": "2026-10-12-001",
-      "title": "Equidistant Site Center v1.1.3 Released",
+      "title": "Equidistant Site Center v1.1.4 Released",
       "date": "2026-10-12",
-      "content": "Bug fix + unit enhancement. Precision and unit suffix now saved correctly in settings. Added unit dropdown (m / km) with kilometer auto-conversion in labels.",
+      "content": "Maintenance update with improvements to notification system and settings persistence.",
       "link": "https://github.com/erlrich/equidistant-site-center-qgis/releases",
       "priority": "high"
     },
     {
       "id": "2026-10-12-002",
-      "title": "Check out my other QGIS plugins",
+      "title": "Related QGIS Tools",
       "date": "2026-10-12",
-      "content": "Explore more QGIS plugins by the same author. Visit the QGIS Plugin Repository to see the full collection.",
-      "link": "https://plugins.qgis.org/plugins/",
-      "priority": "medium"
+      "content": "Additional QGIS plugins by the same author are available at aktivioo.com, including Floating Compass Pro for antenna and beam visualization.",
+      "link": "https://aktivioo.com",
+      "priority": "low"
     }
   ]
 }
