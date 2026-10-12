@@ -205,3 +205,21 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ============================================================
+# Custom rules for QGIS plugin repo
+# ============================================================
+
+# Release ZIP files — hosted on GitHub Releases, not in repo
+*.zip
+
+# QGIS plugin temporary files
+*.qgis.zip
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
