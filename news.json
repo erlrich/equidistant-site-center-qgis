@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "last_updated": "2026-10-12",
+  "news": [
+    {
+      "id": "2026-10-12-001",
+      "title": "Equidistant Site Center v1.1.4 Released",
+      "date": "2026-10-12",
+      "content": "Maintenance update with improvements to notification system and settings persistence.",
+      "link": "https://github.com/erlrich/equidistant-site-center-qgis/releases/tag/v1.1.4",
+      "priority": "high"
+    },
+    {
+      "id": "2026-10-12-002",
+      "title": "Related QGIS Tools",
+      "date": "2026-10-12",
+      "content": "Additional QGIS plugins by the same author are available at aktivioo.com, including Floating Compass Pro for antenna and beam visualization.",
+      "link": "https://aktivioo.com",
+      "priority": "low"
+    }
+  ]
+}
