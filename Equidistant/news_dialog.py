@@ -14,7 +14,7 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.PyQt.QtGui import QDesktopServices, QFont
 from qgis.PyQt.QtCore import Qt, QUrl
-
+from qgis.core import QgsMessageLog, Qgis
 
 class NewsDialog(QDialog):
     """
@@ -188,7 +188,11 @@ class NewsDialog(QDialog):
         if self.mark_all_cb.isChecked() and self.mark_all_callback:
             try:
                 self.mark_all_callback()
-            except Exception:
-                pass
+            except (RuntimeError, TypeError) as e:
+                QgsMessageLog.logMessage(
+                    f"News dialog: mark_all_callback failed — {e}",
+                    "Equidistant Site Center",
+                    Qgis.Info
+                )
 
         super().accept()

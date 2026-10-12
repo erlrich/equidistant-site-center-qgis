@@ -104,8 +104,12 @@ class AdjustCenterTool(QgsMapTool):
 
             try:
                 self.iface.plugin()._adjust_center_active = False
-            except Exception:
-                pass
+            except (AttributeError, RuntimeError) as e:
+                QgsMessageLog.logMessage(
+                    f"Adjust Center: failed to release flag — {e}",
+                    "Equidistant Site Center",
+                    Qgis.Info
+                )
 
             self.canvas.unsetMapTool(self)
 
@@ -271,5 +275,9 @@ class AdjustCenterTool(QgsMapTool):
         # Apply visual settings from plugin (ensure labeling active)
         try:
             self.iface.plugin().apply_visual_settings_realtime()
-        except Exception:
-            pass
+        except (AttributeError, RuntimeError) as e:
+            QgsMessageLog.logMessage(
+                f"Adjust Center: failed to apply visual settings — {e}",
+                "Equidistant Site Center",
+                Qgis.Info
+            )

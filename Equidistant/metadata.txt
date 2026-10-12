@@ -1,7 +1,7 @@
 [general]
 name=Equidistant Site Center
 description=Compute a spatially balanced center point from selected sites using least-squares distance optimization.
-version=1.1.4
+version=1.1.5
 qgisMinimumVersion=3.40
 qgisMaximumVersion=4.99
 author=Achmad Amrulloh
@@ -23,6 +23,9 @@ experimental=False
 deprecated=False
 
 changelog=
+    1.1.5 - Security compliance update.
+            - Replaced silent exception handlers with logged warnings
+            - Compliant with QGIS Plugin Repository security scanning
     1.1.4 - Maintenance update.
             - Added: Informational notification panel
             - Improved: Settings persistence for label options

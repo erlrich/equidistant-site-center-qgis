@@ -175,8 +175,12 @@ class EquidistantCenterPlugin:
                 try:
                     self.iface.removeToolBarIcon(getattr(self, attr))
                     self.iface.removePluginMenu(main_menu, getattr(self, attr))
-                except Exception:
-                    pass
+                except (AttributeError, RuntimeError) as e:
+                    QgsMessageLog.logMessage(
+                        f"Unload: failed to remove {attr} — {e}",
+                        "Equidistant Site Center",
+                        Qgis.Info
+                    )
 
         self._adjust_center_active = False
 
