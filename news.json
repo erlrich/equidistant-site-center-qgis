@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "last_updated": "2026-10-12",
+  "news": [
+    {
+      "id": "2026-10-12-001",
+      "title": "Equidistant Site Center v1.1.3 Released",
+      "date": "2026-10-12",
+      "content": "Bug fix + unit enhancement. Precision and unit suffix now saved correctly in settings. Added unit dropdown (m / km) with kilometer auto-conversion in labels.",
+      "link": "https://github.com/erlrich/equidistant-site-center-qgis/releases",
+      "priority": "high"
+    },
+    {
+      "id": "2026-10-12-002",
+      "title": "Check out my other QGIS plugins",
+      "date": "2026-10-12",
+      "content": "Explore more QGIS plugins by the same author. Visit the QGIS Plugin Repository to see the full collection.",
+      "link": "https://plugins.qgis.org/plugins/",
+      "priority": "medium"
+    }
+  ]
+}
